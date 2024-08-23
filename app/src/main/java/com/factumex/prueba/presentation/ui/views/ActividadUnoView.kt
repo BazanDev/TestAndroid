@@ -1,44 +1,43 @@
 package com.factumex.prueba.presentation.ui.views
 
-
-
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
-import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
-import coil.compose.ImagePainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import com.factumex.prueba.R
+import com.factumex.prueba.presentation.ui.components.ImagenCircular
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Slider
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 
 @Preview(showBackground = true)
 @Composable
 fun ActividadUnoViewPreview() {
-    SimpleImageLoader(
-        //url = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-1398008130-663c7735a4fd4.jpg?crop=1xw:0.7280716162943496xh;center,top&resize=1200:*",
-        url = "",
+    ImagenCircular(
+        url = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-1398008130-663c7735a4fd4.jpg?crop=1xw:0.7280716162943496xh;center,top&resize=1200:*",
         name = "Omar Cruz",
         placeholder = painterResource(R.drawable.logo_factum),
         backgroundColor = Color.Blue,
@@ -49,132 +48,139 @@ fun ActividadUnoViewPreview() {
 
 @Composable
 fun ActividadUnoView(navHostController: NavHostController) {
+    var url by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
 
-    SimpleImageLoader(
-        url = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-1398008130-663c7735a4fd4.jpg?crop=1xw:0.7280716162943496xh;center,top&resize=1200:*",
-        //url  ="",
-        name = "Omar Cruz",
-        placeholder = painterResource(R.drawable.logo_factum),
-        backgroundColor = Color.Blue,
-        textColor = Color.White
-    )
-/*
+    var backgroundColor by remember { mutableStateOf(Color.White) }
+    var red by remember { mutableStateOf(backgroundColor.red) }
+    var green by remember { mutableStateOf(backgroundColor.green) }
+    var blue by remember { mutableStateOf(backgroundColor.blue) }
 
 
 
-    val painter = rememberImagePainter(data = url)
-    var initials by remember { mutableStateOf("") }
-    var showInitials by remember { mutableStateOf(false) }
-
-    LaunchedEffect(text) {
-        if (!text.isNullOrEmpty()) {
-            initials = extractInitials(text)
-            showInitials = initials.isNotEmpty() && initials[0].isLetter()
-        }
-    }
-
-
-    Box(modifier = Modifier.fillMaxSize()){
-        Column {
-            SimpleImageLoader()
-        }
-    }*/
-
-
-
-}
-
-@Composable
-fun SimpleImageLoader(
-    url: String,
-    name: String,
-    placeholder: Painter,
-    backgroundColor: Color = Color.Gray,
-    textColor: Color = Color.White
-) {
-    val painter = rememberAsyncImagePainter(model = url)
-   // val isImageLoaded = painter.state is AsyncImagePainter.State.Success
-
-    val initials = remember(name) {
-        // Extraer iniciales
-        val words = name.split(" ")
-            .filter { it.isNotEmpty() }
-        when {
-            words.isEmpty() -> ""
-            words.size == 1 -> words[0].take(1)
-            else -> words[0].take(1) + words[1].take(1)
-        }.uppercase()
-    }
 
     Box(
-        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(128.dp)
-            .clip(CircleShape)
-            .background(backgroundColor)
-            .border(2.dp, Color.Gray, CircleShape)
+            .fillMaxSize()
+            .padding(top = 16.dp, bottom = 16.dp, start = 32.dp, end = 32.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        when {
-            url.isEmpty()  -> {
-                if (initials.isNotEmpty() && initials.first().isLetter()) {
-                    // Mostrar las iniciales
-                    Text(
-                        text = initials,
-                        color = textColor,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                } else {
-                    // Mostrar el placeholder
-                    Image(
-                        painter = placeholder,
-                        contentDescription = "Placeholder",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.clip(CircleShape)
-                    )
-                }
-            }
-            else -> {
-                // Mostrar la imagen desde la URL
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(url)
-                        .crossfade(true)
-                        .build(),
-                    placeholder = placeholder,
-                    contentDescription = "Imagen",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.clip(CircleShape)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Imagen Circular
+            ImagenCircular(
+                url = url,
+                name = name,
+                placeholder = painterResource(R.drawable.logo_factum),
+                backgroundColor = backgroundColor,
+                textColor = Color.Black,
+                size = 200.dp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Campo de texto para la URL
+            OutlinedTextField(
+                value = url,
+                onValueChange = { url = it },
+                label = { Text("URL de la Imagen") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Campo de texto para el nombre
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Nombre") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+
+            Text(
+                text = "Selecciona el color de fondo:",
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                ),
+            )
+
+
+            // Slider rojo
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Rojo",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                )
+                Slider(
+                    value = red,
+                    onValueChange = {
+                        red = it
+                        backgroundColor = Color(red, green, blue)
+                    },
+                    valueRange = 0f..1f,
+                    modifier = Modifier.weight(1f)
                 )
             }
+
+            // Slider verde
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Verde",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                )
+                Slider(
+                    value = green,
+                    onValueChange = {
+                        green = it
+                        backgroundColor = Color(red, green, blue)
+                    },
+                    valueRange = 0f..1f,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            // Slider azil
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Azul:",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                )
+                Slider(
+                    value = blue,
+                    onValueChange = {
+                        blue = it
+                        backgroundColor = Color(red, green, blue)
+                    },
+                    valueRange = 0f..1f,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+
         }
+
     }
 }
-
-/*
-@Composable
-fun SimpleImageLoader() {
-    val url = "https://hips.hearstapps.com/hmg-prod/images/gettyimages-1398008130-663c7735a4fd4.jpg?crop=1xw:0.7280716162943496xh;center,top&resize=1200:*"
-    val painter = rememberImagePainter(data = url)
-    val painterState = painter.state
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(128.dp)
-            .clip(CircleShape)
-            .border(2.dp, Color.Gray, CircleShape)
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(url)
-                .crossfade(true)
-                .build(),
-            placeholder = painterResource(R.drawable.logo_factum),
-            contentDescription = "Imagen",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.clip(CircleShape)
-        )
-    }
-}
-*/

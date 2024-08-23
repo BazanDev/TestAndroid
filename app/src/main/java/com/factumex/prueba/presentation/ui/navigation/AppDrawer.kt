@@ -2,16 +2,19 @@ package com.factumex.prueba.presentation.ui.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -29,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.factumex.prueba.R
@@ -37,9 +41,8 @@ import com.factumex.prueba.R
 @Composable
 fun AppDrawer(
     route: String,
+    navigateToInicio: () -> Unit = {},
     navigateToActividadUno: () -> Unit = {},
-    navigateToActividadDos: () -> Unit = {},
-    navigateToActividadTres: () -> Unit = {},
     navigateToPokemon: () -> Unit = {},
     closeDrawer: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -54,62 +57,36 @@ fun AppDrawer(
     ) {
         DrawerHeader(modifier.background(Color.White))
 
-        Box() {
-            Column() {
-
-
+        Box {
+            Column {
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = "Actividad 1",
-                            style = MaterialTheme.typography.labelMedium
+                            text = "Inicio",
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
                         )
                     },
-                    selected = route == AllDestinations.ActividadUno,
+                    selected = route == AllDestinations.Inicio,
                     onClick = {
-                        navigateToActividadUno()
+                        navigateToInicio()
                         closeDrawer()
                     },
                     icon = {
                         Icon(
                             modifier = Modifier
                                 .fillMaxHeight(.40f),
-                            imageVector = Icons.Filled.Favorite , // Aquí cambias el ícono al que prefieras
+                            imageVector = Icons.Filled.Home,
                             contentDescription = null
                         )
                     },
                     colors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = Color.White, // Fondo del ítem no seleccionado
-                        selectedContainerColor = Color.White // Fondo del ítem seleccionado
-                    ),
-                    modifier = Modifier
-                        .background(Color.White)
-                )
-
-
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Actividad 2",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    },
-                    selected = route == AllDestinations.ActividadDos,
-                    onClick = {
-                        navigateToActividadDos()
-                        closeDrawer()
-                    },
-                    icon = {
-                        Icon(
-                            modifier = Modifier
-                                .fillMaxHeight(.40f),
-                            imageVector = Icons.Filled.Favorite , // Aquí cambias el ícono al que prefieras
-                            contentDescription = null
-                        )
-                    },
-                    colors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = Color.White, // Fondo del ítem no seleccionado
-                        selectedContainerColor = Color.White // Fondo del ítem seleccionado
+                        unselectedContainerColor = Color.White,
+                        selectedContainerColor = Color.White
                     ),
                     modifier = Modifier
                         .background(Color.White)
@@ -118,37 +95,13 @@ fun AppDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = "Actividad 3",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    },
-                    selected = route == AllDestinations.ActividadTres,
-                    onClick = {
-                        navigateToActividadTres()
-                        closeDrawer()
-                    },
-                    icon = {
-                        Icon(
-                            modifier = Modifier
-                                .fillMaxHeight(.40f),
-                            imageVector = Icons.Filled.Favorite , // Aquí cambias el ícono al que prefieras
-                            contentDescription = null
-                        )
-                    },
-                    colors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = Color.White, // Fondo del ítem no seleccionado
-                        selectedContainerColor = Color.White // Fondo del ítem seleccionado
-                    ),
-                    modifier = Modifier
-                        .background(Color.White)
-                )
-
-
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = "Pokemon",
-                            style = MaterialTheme.typography.labelMedium
+                            text = "Pokedex",
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
                         )
                     },
                     selected = route == AllDestinations.Pokemon,
@@ -160,13 +113,47 @@ fun AppDrawer(
                         Icon(
                             modifier = Modifier
                                 .fillMaxHeight(.40f),
-                            imageVector = Icons.Filled.Favorite , // Aquí cambias el ícono al que prefieras
+                            imageVector = Icons.Filled.Search,
                             contentDescription = null
                         )
                     },
                     colors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = Color.White, // Fondo del ítem no seleccionado
-                        selectedContainerColor = Color.White // Fondo del ítem seleccionado
+                        unselectedContainerColor = Color.White,
+                        selectedContainerColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .background(Color.White)
+                )
+
+
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = "Componente",
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        )
+                    },
+                    selected = route == AllDestinations.ActividadUno,
+                    onClick = {
+                        navigateToActividadUno()
+                        closeDrawer()
+                    },
+                    icon = {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxHeight(.40f),
+                            imageVector = Icons.Filled.AccountCircle,
+                            contentDescription = null
+                        )
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = Color.White,
+                        selectedContainerColor = Color.White
                     ),
                     modifier = Modifier
                         .background(Color.White)
@@ -183,7 +170,7 @@ fun DrawerHeader(modifier: Modifier = Modifier) {
 
     Card(
         shape = RoundedCornerShape(8.dp),
-
+        modifier = Modifier.border(2.dp, Color.LightGray),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = MaterialTheme.colorScheme.onSurface,
@@ -201,7 +188,10 @@ fun DrawerHeader(modifier: Modifier = Modifier) {
             Image(
                 painter = painterResource(id = R.drawable.logo_factum),
                 contentDescription = "Logo",
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(48.dp)
             )
 
 
@@ -209,8 +199,9 @@ fun DrawerHeader(modifier: Modifier = Modifier) {
                 text = stringResource(id = R.string.version_app),
                 style = TextStyle(
                     color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
                 )
             )
         }

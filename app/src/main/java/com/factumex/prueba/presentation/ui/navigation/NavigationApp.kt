@@ -31,17 +31,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.factumex.prueba.presentation.ui.views.ActividadDosView
-import com.factumex.prueba.presentation.ui.views.ActividadTresView
 import com.factumex.prueba.presentation.ui.views.ActividadUnoView
+import com.factumex.prueba.presentation.ui.views.InicioView
+import com.factumex.prueba.presentation.ui.views.PokemonDetalleView
 import com.factumex.prueba.presentation.ui.views.PokemonView
+import com.factumex.prueba.presentation.viewmodels.PokemonCompartidoViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,30 +56,26 @@ fun NavigationApp(
 ) {
 
     val currentNavBackStackEntry by navHostController.currentBackStackEntryAsState()
-
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: AllDestinations.ActividadUno
+    val currentRoute = currentNavBackStackEntry?.destination?.route ?: AllDestinations.Inicio
 
     val navigationActions = remember(navHostController) {
         AppNavigationActions(navHostController)
     }
 
-    // Estado para controlar la visibilidad del TopAppBar
     var showTopBar by remember { mutableStateOf(true) }
 
-    //Ahora creamos el meno lateral
+    val pokemonCompartidoViewModel: PokemonCompartidoViewModel = hiltViewModel()
+
+
     Box(modifier = Modifier.background(Color.White)) {
 
-
         ModalNavigationDrawer(
-
             gesturesEnabled = true,
             scrimColor = Color.White,
-
             drawerContent = {
                 Card(
                     shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier
-                        .border(2.dp, Color.Blue),
+                    modifier = Modifier.border(2.dp, Color.LightGray),
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White,
                         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -85,35 +84,24 @@ fun NavigationApp(
                 ) {
                     AppDrawer(
                         route = currentRoute,
+                        navigateToInicio = { navigationActions.navigateToInicio() },
                         navigateToActividadUno = { navigationActions.navigateToActividadUno() },
-                        navigateToActividadDos = { navigationActions.navigateToActividadDos() },
-                        navigateToActividadTres = { navigationActions.navigateToActividadTres() },
                         navigateToPokemon = { navigationActions.navigateToPokemon() },
                         closeDrawer = { coroutineScope.launch { drawerState.close() } },
                         modifier = Modifier.background(Color.White)
                     )
                 }
-
-
-            }, drawerState = drawerState
+            },
+            drawerState = drawerState
         ) {
 
-
-            //Creamos el Scaffold que es un layout que incluye un area para el TopBar y el
-            //contenido de la pantalla
-
             Scaffold(
-
-                modifier = Modifier
-                    .background(Color.White),
-
+                modifier = Modifier.background(Color.White),
                 floatingActionButtonPosition = FabPosition.End,
                 containerColor = Color.White,
                 contentColor = Color.White,
-
                 topBar = {
                     if (showTopBar) {
-                        // Envolver TopAppBar en Surface para controlar el borde
                         TopAppBar(
                             title = { Text(text = "") },
                             navigationIcon = {
@@ -128,8 +116,7 @@ fun NavigationApp(
                                         )
                                     })
                             },
-
-                            )
+                        )
                     }
                 },
                 content = { innerPadding ->
@@ -138,42 +125,36 @@ fun NavigationApp(
                         modifier = modifier
                             .fillMaxSize()
                             .background(Color.White)
-                    )
-                    {
+                    ) {
 
                         NavHost(
                             navController = navHostController,
-                            startDestination = AllDestinations.ActividadUno,
+                            startDestination = AllDestinations.Inicio,
                             modifier = modifier
                                 .padding(innerPadding)
                                 .background(Color.White)
-                        )
-                        {
+                        ) {
+
+                            composable(AllDestinations.Inicio) {
+                                InicioView(navHostController)
+                            }
 
                             composable(AllDestinations.ActividadUno) {
                                 ActividadUnoView(navHostController)
                             }
 
-                            composable(AllDestinations.ActividadDos) {
-                                ActividadDosView(navHostController)
-                            }
-
-
-                            composable(AllDestinations.ActividadTres) {
-                                ActividadTresView(navHostController)
-                            }
-
-
                             composable(AllDestinations.Pokemon) {
-                                PokemonView()
+                                PokemonView(navHostController, sharedViewModel = pokemonCompartidoViewModel)
                             }
 
+                            composable(AllDestinations.PokemonDetalle) {
+                                PokemonDetalleView(sharedViewModel = pokemonCompartidoViewModel)
+                            }
 
                         }
 
                     }
                 }
-
             )
         }
     }
