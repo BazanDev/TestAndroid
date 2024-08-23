@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Prueba</string>
+    <string name="version_app">1.0.1</string>
 </resources>

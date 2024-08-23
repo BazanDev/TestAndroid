@@ -1,4 +1,4 @@
-package com.factumex.prueba.ui.theme
+package com.factumex.prueba.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

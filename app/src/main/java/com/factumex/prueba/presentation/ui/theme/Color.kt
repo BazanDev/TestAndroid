@@ -1,4 +1,4 @@
-package com.factumex.prueba.ui.theme
+package com.factumex.prueba.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
